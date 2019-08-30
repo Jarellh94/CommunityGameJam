@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Interactable : MonoBehaviour
+public class UnlockTrigger : MonoBehaviour
 {
+    bool isActivated = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +18,13 @@ public class Interactable : MonoBehaviour
         
     }
 
-    virtual public void Interact() {}
-    virtual public void DeInteract() {}
+    public bool IsActivated()
+    {
+        return isActivated;
+    }
+
+    public void Activate()
+    {
+        isActivated = true;
+    }
 }

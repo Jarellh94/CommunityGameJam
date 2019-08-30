@@ -8,24 +8,27 @@ public class CameraLook : MonoBehaviour
     public float sensitivity = 50f;
     public float interactDistance = 5f;
     public GameObject defaultCursor, interactableCursor;
+    public Hands hands;
+    public LayerMask holdingMask;
 
     float mouseX = 0;
     float rotX;
     float mouseY = 0;
     float rotY;
     
-    bool canInteract = false;
+    bool canInteract = false, canPlace = false, canMove = false;
     GameObject interactTarget;
 
     public float xRotation;
     public float yRotation;
 
+    int count = 0;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.lockState = CursorLockMode.Confined;
+
     }
 
     // Update is called once per frame
@@ -39,10 +42,25 @@ public class CameraLook : MonoBehaviour
         Turning();
         InteractCast();
 
-        if(Input.GetButtonDown("Fire1") && canInteract)
+        if(Input.GetButtonDown("Fire1"))
         {
-            Debug.Log("Interacting with: " + interactTarget.name);
-            interactTarget.transform.GetComponent<Interactable>().Interact();
+            if(canInteract)
+            {
+                interactTarget.transform.GetComponent<Interactable>().Interact();
+            }
+            else if(canPlace)
+            {
+                hands.Place(interactTarget.transform);
+            }
+            else if(canMove)
+            {
+                hands.Pickup(interactTarget.transform.GetComponent<Moveable>());
+            }
+            else
+            {
+                hands.Drop();
+            }
+            
         }
     }
 
@@ -50,7 +68,7 @@ public class CameraLook : MonoBehaviour
     {
         RaycastHit hit; 
 
-        if(Physics.Raycast(transform.position, transform.forward, out hit, interactDistance))
+        if(Physics.Raycast(transform.position, transform.forward, out hit, interactDistance, ~holdingMask))
         {
             
             if(hit.transform.gameObject.CompareTag("Interactable"))
@@ -58,6 +76,26 @@ public class CameraLook : MonoBehaviour
                 interactableCursor.SetActive(true);
                 defaultCursor.SetActive(false);
                 canInteract = true;
+                canPlace = false;
+                canMove = false;
+                interactTarget = hit.transform.gameObject;
+            }
+            else if(hit.transform.gameObject.CompareTag("Moveable"))
+            {
+                interactableCursor.SetActive(true);
+                defaultCursor.SetActive(false);
+                canInteract = false;
+                canPlace = false;
+                canMove = true;
+                interactTarget = hit.transform.gameObject;
+            }
+            else if(hit.transform.gameObject.CompareTag("Placeable"))
+            {
+                interactableCursor.SetActive(true);
+                defaultCursor.SetActive(false);
+                canInteract = false;
+                canMove = false;
+                canPlace = true;
                 interactTarget = hit.transform.gameObject;
             }
             else
@@ -65,6 +103,8 @@ public class CameraLook : MonoBehaviour
                 interactableCursor.SetActive(false);
                 defaultCursor.SetActive(true);
                 canInteract = false;
+                canPlace = false;
+                canMove = false;
                 interactTarget = null;
             }
         }
@@ -73,6 +113,8 @@ public class CameraLook : MonoBehaviour
             interactableCursor.SetActive(false);
             defaultCursor.SetActive(true);
             canInteract = false;
+            canPlace = false;
+            canMove = false;
             interactTarget = null;
         }
     }

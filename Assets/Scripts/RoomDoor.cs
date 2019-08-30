@@ -2,9 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExitDoor : MonoBehaviour
+public enum DoorType
+{
+    EXIT, ENTRANCE
+}
+public class RoomDoor : Interactable
 {
     Animator anim;
+    public DoorType type;
+    public RoomManager manager;
 
     // Start is called before the first frame update
     void Start()
@@ -18,13 +24,24 @@ public class ExitDoor : MonoBehaviour
         
     }
 
+    override public void Interact()
+    {
+        Open();
+    }
+
     public void Open()
     {
+        manager.SetTempDoor(type);
         anim.SetTrigger("Open");
     }
 
     public void Close() 
     {
         anim.SetTrigger("Close");
+    }
+
+    public void SwitchDoor()
+    {
+        manager.SwitchDoors(type);
     }
 }

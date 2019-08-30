@@ -5,6 +5,7 @@ using UnityEngine;
 public class Door : Interactable
 {
     Animator anim;
+    int numActivated = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -21,5 +22,13 @@ public class Door : Interactable
     override public void Interact()
     {
         anim.SetTrigger("Open");
+        numActivated++;
+    }
+
+    override public void DeInteract()
+    {
+        numActivated--;
+        if(numActivated == 0)
+            anim.SetTrigger("Close");
     }
 }

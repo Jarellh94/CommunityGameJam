@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Interactable : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
     {
-        
+        Time.timeScale = 0;
     }
 
     // Update is called once per frame
@@ -16,6 +16,9 @@ public class Interactable : MonoBehaviour
         
     }
 
-    virtual public void Interact() {}
-    virtual public void DeInteract() {}
+    public void BeginGame() 
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Time.timeScale = 1;
+    }
 }

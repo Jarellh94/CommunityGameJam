@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Interactable : MonoBehaviour
+public class RoomDoorTrigger : MonoBehaviour
 {
+    public RoomDoor door;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +18,10 @@ public class Interactable : MonoBehaviour
         
     }
 
-    virtual public void Interact() {}
-    virtual public void DeInteract() {}
+    private void OnTriggerEnter(Collider other) {
+        if(other.CompareTag("Player"))
+        {
+            door.Close();
+        }
+    }
 }
