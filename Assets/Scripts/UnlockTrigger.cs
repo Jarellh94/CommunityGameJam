@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnlockTrigger : MonoBehaviour
+public class UnlockTrigger : Interactable
 {
-    bool isActivated = false;
+    public bool isActivated = false;
+    public Unlock myUnlock;
+    public Material deactiveMat, activeMat;
 
     // Start is called before the first frame update
     void Start()
@@ -18,13 +20,32 @@ public class UnlockTrigger : MonoBehaviour
         
     }
 
+    override public void Interact()
+    {
+        if(!isActivated)
+            Activate();
+        else
+        {
+            Deactivate();
+        }
+    }
+
     public bool IsActivated()
     {
         return isActivated;
     }
 
-    public void Activate()
+    virtual public void Activate()
     {
         isActivated = true;
+        GetComponent<Renderer>().material = activeMat;
+        myUnlock.CheckUnlocked();
+    }
+
+    virtual public void Deactivate()
+    {
+        isActivated = false;
+        GetComponent<Renderer>().material = deactiveMat;
+        myUnlock.CheckUnlocked();
     }
 }

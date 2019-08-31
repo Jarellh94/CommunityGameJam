@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Unlock : MonoBehaviour
 {
-    public List<Placement> triggers;
+    public List<UnlockTrigger> triggers;
     public Interactable door;
 
     bool unlocked;
