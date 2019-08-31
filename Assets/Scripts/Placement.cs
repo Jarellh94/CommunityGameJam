@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Placement : UnlockTrigger
 {
-
     // Start is called before the first frame update
     void Start()
     {
+        mySource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame

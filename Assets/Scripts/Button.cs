@@ -8,10 +8,12 @@ public class Button : Interactable
     public GameObject regTop;
     public GameObject actTop;
 
+    AudioSource mySource;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        mySource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -22,10 +24,12 @@ public class Button : Interactable
 
     override public void Interact()
     {
+        mySource.Play();
         target.GetComponent<RoomDoor>().Open();
         regTop.SetActive(false);
         actTop.SetActive(true);
         StartCoroutine(TurnOffButton());
+
     }  
 
     IEnumerator TurnOffButton()

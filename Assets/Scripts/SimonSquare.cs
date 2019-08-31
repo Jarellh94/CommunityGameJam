@@ -5,8 +5,10 @@ using UnityEngine;
 public class SimonSquare : Interactable
 {
     public Simon mySimon;
-    public Material highLightColor, wrongColor;
+    public Material highLightColor, wrongColor, doneColor;
     public int myNum;
+    AudioSource source;
+    public AudioClip wrongSound, mySound;
     Renderer myRenderer;
     Material mycolor;
     
@@ -16,6 +18,7 @@ public class SimonSquare : Interactable
     {
         myRenderer = GetComponent<Renderer>();
         mycolor = myRenderer.material;
+        source = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -27,7 +30,7 @@ public class SimonSquare : Interactable
     override public void Interact()
     {
         myRenderer.material = highLightColor;
-        StartCoroutine(UnHighlight());
+        source.Play();
         if(mySimon)
             mySimon.Guess(myNum, this);
     }
@@ -43,12 +46,31 @@ public class SimonSquare : Interactable
         StartCoroutine(FlashWrong());
     }
 
+    public void Right()
+    {
+        StartCoroutine(UnHighlight());
+    }
+
     IEnumerator FlashWrong()
     {
-        yield return new WaitForSeconds(.6f);
+        StopCoroutine(UnHighlight());
+        
+        yield return new WaitForSeconds(.5f);
+        source.clip = wrongSound;
+        source.Play();
+
         myRenderer.material = wrongColor;
 
         yield return new WaitForSeconds(1f);
+        source.clip = mySound;
         myRenderer.material = mycolor;
+    }
+
+    public void Done()
+    {
+        StopCoroutine(UnHighlight());
+        highLightColor = doneColor;
+        myRenderer.material = doneColor;
+        gameObject.tag = "Untagged";
     }
 }

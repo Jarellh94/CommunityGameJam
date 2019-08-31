@@ -29,6 +29,8 @@ public class Door : Interactable
     {
         numActivated--;
         if(numActivated == 0)
+        {
             anim.SetTrigger("Close");
+        }
     }
 }

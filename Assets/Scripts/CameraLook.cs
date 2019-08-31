@@ -42,6 +42,9 @@ public class CameraLook : MonoBehaviour
 
         if(Input.GetButtonDown("Fire1"))
         {
+            if(Time.timeScale == 1)
+                Cursor.lockState = CursorLockMode.Locked;
+
             if(canInteract)
             {
                 interactTarget.transform.GetComponent<Interactable>().Interact();

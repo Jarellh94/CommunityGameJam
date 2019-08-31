@@ -6,6 +6,8 @@ public class Simon : MonoBehaviour
 {
     public List<int> sequence = new List<int>();
     public List<SimonSquare> simonSquares;
+    public List<SimonSquare> playerBoard;
+    public List<UnlockTrigger> lights;
 
     public int currGuessCount = 0; //Number of times the player has guessed this roud
     public int currSequenceNum = 0; //Current round
@@ -16,7 +18,7 @@ public class Simon : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Random.InitState((int)Time.time);
     }
 
     // Update is called once per frame
@@ -45,6 +47,7 @@ public class Simon : MonoBehaviour
         {
             currSequenceNum = 0;
             currGuessCount = 0;
+            guessSquare.Right();
             GenerateSequence();
         }
         else if(!isPlaying)
@@ -55,23 +58,33 @@ public class Simon : MonoBehaviour
 
                 if(currGuessCount < 0)
                 {
+                    lights[currSequenceNum].Activate();
                     currSequenceNum++;
                     currGuessCount = currSequenceNum;
 
                     if(currSequenceNum == sequence.Count)
                     {
+                        guessSquare.Done();
                         Complete();
                     }
                     else
                     {
-                        Debug.Log("Next Level!");
+                        guessSquare.Right();
                         StartCoroutine(PlaySequence());
                     }
+                }
+                else
+                {
+                    guessSquare.Right();
                 }
             }
             else
             {
                 guessSquare.Wrong();
+                foreach (var item in lights)
+                {
+                    item.Deactivate();
+                }
                 currSequenceNum = 0;
                 currGuessCount = 0;
                 GenerateSequence();
@@ -81,12 +94,14 @@ public class Simon : MonoBehaviour
 
     IEnumerator PlaySequence()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         isPlaying = true;
         for(int i = 0; i <= currSequenceNum; i++)
         {
-            simonSquares[sequence[i]].Interact();
             yield return new WaitForSeconds(1f);
+            simonSquares[sequence[i]].Interact();
+            simonSquares[sequence[i]].Right();
+
         }
 
         isPlaying = false;
@@ -95,5 +110,14 @@ public class Simon : MonoBehaviour
     void Complete()
     {
         Debug.Log("Congrats");
+        foreach (var item in playerBoard)
+        {
+            item.Done();
+        }
+
+        foreach (var item in simonSquares)
+        {
+            item.Done();
+        }
     }
 }

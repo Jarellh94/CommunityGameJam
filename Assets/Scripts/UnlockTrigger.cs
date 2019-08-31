@@ -8,10 +8,12 @@ public class UnlockTrigger : Interactable
     public Unlock myUnlock;
     public Material deactiveMat, activeMat;
 
+    public AudioSource mySource;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        mySource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -40,6 +42,8 @@ public class UnlockTrigger : Interactable
         isActivated = true;
         GetComponent<Renderer>().material = activeMat;
         myUnlock.CheckUnlocked();
+        if(mySource)
+            mySource.Play();
     }
 
     virtual public void Deactivate()
@@ -47,5 +51,7 @@ public class UnlockTrigger : Interactable
         isActivated = false;
         GetComponent<Renderer>().material = deactiveMat;
         myUnlock.CheckUnlocked();
+        if(mySource)
+            mySource.Play();
     }
 }

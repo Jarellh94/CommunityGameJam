@@ -308,8 +308,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.2
-  m_Center: {x: 0, y: 0.4, z: 0}
+  m_Radius: 0.06651318
+  m_Center: {x: 0, y: 0.53348684, z: 0}
 --- !u!114 &6672127095499883618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,9 +322,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb4b70986b040a64596b552ba5a11ca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isActivated: 0
+  myUnlock: {fileID: 2074997213148156728}
   deactiveMat: {fileID: 2100000, guid: f34c8edf25ce8e74aa07493bfcc53918, type: 2}
   activeMat: {fileID: 2100000, guid: 4278cab23eed45e4e8f9664c32115242, type: 2}
-  myUnlock: {fileID: 2074997213148156728}
+  mySource: {fileID: 0}
 --- !u!54 &5753885087883921565
 Rigidbody:
   m_ObjectHideFlags: 0
